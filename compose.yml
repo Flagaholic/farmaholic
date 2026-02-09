@@ -8,8 +8,10 @@ services:
     environment:
       REDIS_URL: 'redis://redis:6379/0'
       POSTGRES_DSN: 'host=postgres port=5432 user=farm password=farm dbname=farm'
-      SERVER_PASSWORD: ${SERVER_PASSWORD}
+      SERVER_PASSWORD: ${SERVER_PASSWORD:-changeme}
     restart: unless-stopped
+    ports:
+      - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy

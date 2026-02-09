@@ -44,8 +44,6 @@ export default {
       });
       try {
         await APIService.post("/post_flags", flags);
-        const newFilters = { sploit: "Manual" };
-        this.setFlagFilters(newFilters);
         await this.updatePage(1);
       } catch (e) {
         console.error("Error sending manual flags", e);

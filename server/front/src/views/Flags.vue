@@ -21,8 +21,21 @@ import { flagsPerPage } from "@/config";
 export default {
   components: { FlagsForm, FlagsSubmit, FlagsTable },
   methods: mapActions(["fetchFlags"]),
+  data() {
+    return {
+      _poll: null,
+    };
+  },
   created: async function () {
     await this.fetchFlags({ page: 1, pageSize: flagsPerPage });
+    this._poll = setInterval(() => {
+      this.fetchFlags({ page: 1, pageSize: flagsPerPage });
+    }, 2000);
+  },
+  beforeUnmount() {
+    if (this._poll) {
+      clearInterval(this._poll);
+    }
   },
 };
 </script>

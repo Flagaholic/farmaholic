@@ -7,7 +7,12 @@ COPY front /app
 WORKDIR /app
 
 FROM front-base AS front-build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# added 2 lines here to fix build error with pnpm
+RUN printf "allowBuilds:\n  esbuild: true\n" > /app/pnpm-workspace.yaml
+# changed to --no-frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --no-frozen-lockfile
+# used 1.70.0 sass
+RUN pnpm add -D sass@^1.70.0
 RUN pnpm run build
 
 FROM nginx:1.21.0-alpine
